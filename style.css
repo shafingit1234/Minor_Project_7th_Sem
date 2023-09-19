@@ -1,0 +1,21 @@
+#cnv{
+    margin-right: auto;
+    margin-left: auto;
+    display: block;
+    background-color: rgb(172, 180, 172)
+}
+.cnvs{
+    border: 2px solid blue;
+}
+#result{
+    display: none;
+}
+#tbl{
+    display: none;
+}
+#btn-result{
+    display: none;
+}
+#crt-polygon , #crt-points, #crt-plot-points{
+    display: none;
+}
