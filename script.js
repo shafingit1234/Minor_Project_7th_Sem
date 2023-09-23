@@ -5,19 +5,50 @@ const line_start = [];
 const line_end = [];
 const clipped_Line = [];
 const edges = [];
+
+const line_table = document.getElementById("table_lines");
+const tble = document.getElementById("table_poly");
 let total_vertices = document.getElementById("numVertices");
 let total_lines = document.getElementById("numLines");
-console.log(total_vertices.value);
+let mx_left = Infinity;
+let mx_right = -1;
+let partition_width = -1;
+
+//function to clear the canvas.
 function clearCanvas() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  total_vertices.value = 0;
   polygonVertices.length = 0;
+  mx_left = Infinity;
+  mx_right = -1;
+  partition_width = -1;
+  line_start.length = 0;
+  line_end.length = 0;
+  clipped_Line.length = 0;
 }
-function generateConvexPolygon() {
-  let numVertices = total_vertices.value | 3;
-  // Number of vertices for the polygon
+//function to clear already clipped lines and re create new clipped lines.
+function clearCanvasForClipping() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  mx_left = Infinity;
+  mx_right = -1;
+  partition_width = -1;
+  drawPolygon(polygonVertices);
+  line_start.length = 0;
+  line_end.length = 0;
+  clipped_Line.length = 0;
+}
 
-  const radius = 150; // Radius of the polygon
+function generateConvexPolygon() {
+  // console.log(total_vertices.value);
+  delete_line_table();
+  let numVertices = total_vertices.value;
+  if (numVertices == null) {
+    numVertices = 3;
+  }
+  // Number of vertices for the polygon
   clearCanvas();
+  const radius = 150; // Radius of the polygon
+
   // const vertices = [];
 
   for (let i = 0; i < numVertices; i++) {
@@ -27,22 +58,7 @@ function generateConvexPolygon() {
     polygonVertices.push({ x, y });
   }
   drawPolygon(polygonVertices);
-  const tble = document.getElementById("table_poly");
-  console.log(tble);
-  if (tble.style.display === "block") {
-    console.log("hi");
-    // let tbdy = tble.getElementsByTagName("tbody");
-    let tbody = tble.querySelector("tbody");
-    // let tbl = tble.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
-    // console.log(tbl);
-    // let sze = tbl.length;
-    // for (let i = sze - 1; i >= 0; i--) {
-    //   tbdy.deleteRow(i);
-    // }
-    tble.removeChild(tbody);
-    tbody = document.createElement("tbody");
-    tble.appendChild(tbody);
-  }
+  delete_poly_table();
   tble.style.display = "block";
   let tmp = tble.getElementsByTagName("tbody");
   polygonVertices.map((ele, index) => {
@@ -55,11 +71,17 @@ function generateConvexPolygon() {
     row.appendChild(c_2);
     tmp[0].appendChild(row);
   });
-  // return vertices;
 }
-let mx_left = Infinity;
-let mx_right = -1;
-let partition_width = -1;
+function delete_poly_table() {
+  if (tble.style.display === "block") {
+    // console.log("hi");
+    let tbody = tble.querySelector("tbody");
+    tble.removeChild(tbody);
+    tbody = document.createElement("tbody");
+    tble.appendChild(tbody);
+  }
+  tble.style.display = "none";
+}
 function drawPolygon(vertices) {
   if (vertices.length < 3) return;
 
@@ -73,6 +95,7 @@ function drawPolygon(vertices) {
     ctx.lineTo(vertices[i].x, vertices[i].y);
   }
   partition_width = mx_right - mx_left + 1;
+  // console.log("partition width in drawPolygon function " + partition_width);
   ctx.closePath();
   ctx.stroke();
 }
@@ -90,16 +113,19 @@ function findEquationOfLine() {
     // console.log(slope);
     edges.push([slope, intercept]);
   }
-  console.log("No of edges " + edges.length);
+  // console.log("No of edges " + edges.length);
 }
 function partitionPolygonWithParallelLines(vertices, numPartitions) {
   if (vertices.length < 3 || numPartitions < 1) return;
 
-  const partitionSpacing = partition_width / (numPartitions + 1);
-  console.log(mx_left + " " + mx_right);
+  // console.log("Partition width in partition algo " + partition_width);
+  const partitionSpacing = partition_width / numPartitions;
+  // console.log("mx left and mx right");
+  // console.log(mx_left + " " + mx_right);
+  // console.log("mx left and mx right ends");
   for (let i = 1; i <= numPartitions; i++) {
     const partitionX = i * partitionSpacing + mx_left;
-
+    // console.log("partition X" + partitionX);
     // ctx.beginPath();
     line_start.push({ x: partitionX, y: 0 });
     line_end.push({ x: partitionX, y: canvas.height });
@@ -109,9 +135,65 @@ function partitionPolygonWithParallelLines(vertices, numPartitions) {
   }
 }
 function generateLines() {
-  let num_lines = total_lines | 3;
+  let num_lines = 3;
+  if (
+    total_lines.value != 3 ||
+    total_lines.value != undefined ||
+    total_lines.value != null
+  ) {
+    num_lines = total_lines.value;
+  }
+  clearCanvasForClipping();
+  // ctx.clearRect(0, 0, canvas.width, canvas.height);
+  // console.log("generate Lines " + num_lines);
   partitionPolygonWithParallelLines(polygonVertices, num_lines);
   clip_the_lines();
+  display_line_table();
+}
+function delete_line_table() {
+  if (line_table.style.display === "block") {
+    let tbody = line_table.querySelector("tbody");
+    if (tbody) {
+      while (tbody.firstChild) {
+        tbody.removeChild(tbody.firstChild);
+      }
+    }
+  }
+  line_table.style.display = "none";
+}
+function display_line_table() {
+  delete_line_table();
+  line_table.style.display = "block";
+  let sub_heading_row = document.createElement("tr");
+  let x_1 = document.createElement("td");
+  x_1.innerText = "X_Coordinate";
+  let y_1 = document.createElement("td");
+  y_1.innerText = "Y_Coordinate";
+  let x_2 = document.createElement("td");
+  x_2.innerText = "X_Coordinate";
+  let y_2 = document.createElement("td");
+  y_2.innerText = "Y_Coordinate";
+  sub_heading_row.appendChild(x_1);
+  sub_heading_row.appendChild(y_1);
+  sub_heading_row.appendChild(x_2);
+  sub_heading_row.appendChild(y_2);
+  line_table.getElementsByTagName("tbody")[0].appendChild(sub_heading_row);
+  line_start.map((ele, index) => {
+    let row = document.createElement("tr");
+    let c_1 = document.createElement("td");
+    let c_2 = document.createElement("td");
+    let c_3 = document.createElement("td");
+    let c_4 = document.createElement("td");
+    c_1.innerText = line_start[index].x;
+    c_2.innerText = line_start[index].y;
+    c_3.innerText = line_end[index].x;
+    c_4.innerText = line_end[index].y;
+    row.appendChild(c_1);
+    row.appendChild(c_2);
+    row.appendChild(c_3);
+    row.appendChild(c_4);
+    line_table.querySelector("tbody").appendChild(row);
+  });
 }
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -177,9 +259,9 @@ function clip_the_lines() {
     if (temp.length == 0) continue;
     clipped_Line.push(temp);
   }
-  for (let i = 0; i < clipped_Line.length; i++) {
-    console.log(clipped_Line[i]);
-  }
+  // for (let i = 0; i < clipped_Line.length; i++) {
+  //   console.log(clipped_Line[i]);
+  // }
   plot_clip_lines();
 }
 
@@ -274,4 +356,20 @@ function drawClippedLines() {
   }
 
   ctx.stroke();
+}
+
+function reset() {
+  // alert("reset");
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  total_vertices.value = 0;
+  polygonVertices.length = 0;
+  mx_left = Infinity;
+  mx_right = -1;
+  partition_width = -1;
+  line_start.length = 0;
+  line_end.length = 0;
+  clipped_Line.length = 0;
+  total_lines.length = 0;
+  delete_line_table();
+  delete_poly_table();
 }

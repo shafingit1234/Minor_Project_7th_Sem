@@ -8,14 +8,16 @@
             border: 1px solid black;
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="main.css">
 </head>
 
 <body>
     <div id="wrapper">
+
         <div class="container">
             <div class="btn">
-                <button class="reset">RESET</button>
+                <button class="reset" onclick=reset()>RESET</button>
             </div>
             <div class="canvas_container">
                 <canvas id="coordinateCanvas" width="1000" height="500"></canvas>
@@ -61,7 +63,7 @@
                         <th colspan="2">Line End Point</th>
                     </thead>
                     <tbody>
-                        <tr>
+                        <!-- <tr>
                             <th>X-Coordinate</th>
                             <th>Y-Coordinate</th>
                             <th>X-Coordinate</th>
@@ -78,7 +80,7 @@
                             <td>b</td>
                             <td>c</td>
                             <td>d</td>
-                        </tr>
+                        </tr> -->
                     </tbody>
                 </table>
             </div>
