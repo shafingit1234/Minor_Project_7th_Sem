@@ -2,7 +2,7 @@
     margin-right: auto;
     margin-left: auto;
     display: block;
-    background-color: rgb(172, 180, 172)
+    border: 1px solid black;
 }
 .cnvs{
     border: 2px solid blue;
