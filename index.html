@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Partitioning a Convex Polygon with Parallel Lines</title>
+    <style>
+        #coordinateCanvas {
+            border: 1px solid black;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="wrapper">
+
+        <div class="container">
+            <div class="btn">
+                <button class="reset" onclick=reset()>RESET</button>
+            </div>
+            <div class="canvas_container">
+                <canvas id="coordinateCanvas" width="1000" height="500"></canvas>
+            </div>
+        </div>
+        <div class="container_2">
+
+            <button id="generate_poly" class="reset" onclick=drawConvex()>Generate Polygon</button>
+        </div>
+        <div class="container_3">
+            <div>
+                <table id="table_poly">
+                    <thead>
+                        <th>X-Coordinates</th>
+                        <th>Y-Coordinates</th>
+                    </thead>
+                    <tbody>
+                        <!-- <tr>
+                            <td>a</td>
+                            <td>b</td>
+                        </tr>
+                        <tr>
+                            <td>a</td>
+                            <td>b</td>
+                        </tr> -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="input_lines">
+                <label for=" numVertices">Enter Number of Lines: </label>
+                <input type="text" id="numLines" value="3">
+            </div>
+            <button id="generate_lines" class="reset" onclick=generateLines()>Generate Lines</button>
+        </div>
+        <div class="container_4">
+            <div id="table_lines">
+                <table>
+                    <thead>
+                        <th colspan="2">Line Start Point</th>
+                        <th colspan="2">Line End Point</th>
+                    </thead>
+                    <tbody>
+                        <!-- <tr>
+                            <th>X-Coordinate</th>
+                            <th>Y-Coordinate</th>
+                            <th>X-Coordinate</th>
+                            <th>Y-Coordinate</th>
+                        </tr>
+                        <tr>
+                            <td>a</td>
+                            <td>b</td>
+                            <td>c</td>
+                            <td>d</td>
+                        </tr>
+                        <tr>
+                            <td>a</td>
+                            <td>b</td>
+                            <td>c</td>
+                            <td>d</td>
+                        </tr> -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+    <script src="index.js"></script>
+</body>
+
+</html>
