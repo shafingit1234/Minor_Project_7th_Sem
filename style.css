@@ -1,5 +1,8 @@
 *{
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
+    
 }
 #coordinateCanvas{
     margin-right: auto;
@@ -61,18 +64,19 @@
     margin-left: 0px;
     gap: 0px;
 }
-#numVertices, #numLines , label{
+#numVertices, #numLines , label, #edge_selection_text{
     color: black;
     font-size: 1.4rem;
     text-align: center;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
-label{
+label, #edge_selection_text{
     width: 100%;
     text-align: center;
     padding-top: 1.2%;
     font-family: Arial, Helvetica, sans-serif;
+    border: none;
 }
 
 #generate_poly , #generate_lines{
@@ -142,3 +146,35 @@ select {
     transition: 0.3s;
 }
 
+.entry-container{
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.mx_width_entry , .slope_entry{
+    border: 2px solid black;
+    align-self: center;
+    padding: 20px;
+}
+.edge_selection{
+    border: 3px solid green;
+    align-self: center;
+}
+.slope_entry{
+    border: 2px solid greenyellow;
+    align-self: center;
+}
+input{
+    color: black;
+    font-size: 1.4rem;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.edge_selection{
+    text-align: center;
+}
+#edge_selection_one{
+    display: none;
+}
